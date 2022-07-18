@@ -1,0 +1,626 @@
+#include<iostream.h>
+#include<stdlib.h>
+#include<conio.h>
+#include<time.h>
+#include<stdio.h>
+#include<string.h>
+#include<fstream.h>
+#include<dos.h>
+#include<graphics.h>
+class user
+{
+  char name[20];
+  int age;
+  long long int reward;
+  int rate;
+  public:
+
+  void getdata();
+  void show(int);
+  void result(int); //member functions
+
+  char *ret_name()
+  {
+    return name;
+  }
+  int ret_reward()
+  {
+    return reward;
+  }
+  void get_reward(int l)
+  {
+  reward=l;
+  }
+
+};
+
+
+void user::getdata()
+//function to take user's info
+
+{
+  cout<<"\n\t       ";
+  textcolor(10);
+  cprintf(" COMPLETE YOUR INFORMATION ");
+  textcolor(WHITE);
+  cout<<endl<<"_______________________________________________________________";
+  cout<<"\n\n\n Enter your name : ";
+  gets(name);
+  cout<<"\n Enter your age(in years) : ";
+  cin>>age;
+}
+void user::show(int x)
+{
+  gotoxy(4,x);
+  cout<<name;
+  gotoxy(22,x);
+  cout<<age;
+  gotoxy(40,x);
+  cout<<reward;
+  gotoxy(55,x);
+  cout<<rate;
+}
+
+void user:: result(int i)
+//function to calculate the result
+
+{
+  clrscr();
+  cout<<"\n\t";
+  textcolor(CYAN);
+  cprintf(" So here are the QUIZ RESULTS -> ");
+  cout<<endl;
+  cout<<"\n\n\t Name               : "<<name;
+  cout<<"\n\n\t Age                : "<<age;
+  cout<<"\n\n\t Correct            : "<<i;
+  cout<<endl;
+  cout<<"\n\n Amount won           :"<<reward;
+  cout<<endl;
+  long long int k=reward;
+  textcolor(YELLOW);
+
+   if(k>=256000)
+   cprintf("Excellent! And Well Played");
+
+   else if(k>=32000 && k<256000)
+   cprintf("Good! And congrats");
+
+   else if(k>=0 && k<32000)
+   cprintf("Could be done better!");
+   cout<<endl;
+   sound(125);
+   delay(2000);
+   nosound();
+   delay(2000);
+   while(1)
+   { textcolor(9);
+    cprintf(" Please rate RISK IT ALL out of 10 -- ");
+    cin>>rate;
+    textcolor(WHITE);
+    if(rate>10||rate<0)
+    cout<<"\n\t Invalid rating! \n\t";
+    else
+    break;}
+    cout<<endl<<endl<<'\t';
+
+   textcolor(4+BLINK);
+
+  cprintf("THANK YOU FOR YOUR FEEDBACK !!!");
+  cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+  }
+
+
+void instructions()
+
+{
+  textcolor(14);
+  cout<<"\n\n  ";
+
+  cprintf(" These are some instructions for Risk It All! :\n ");
+  //rules for the quiz
+
+  textcolor(WHITE);
+  cout<<endl<<endl;
+  cprintf(" 1.In this quiz you'll be asked 05 questions from any topic .");
+  cout<<endl<<endl;
+  cprintf(" 2.For each correct response, you'll be rewarded and for incorrect response you lose all your money.");
+  cout<<endl<<endl;
+  cprintf(" 3.You can quit if you do not know the answer.");
+  cout<<endl<<endl;
+  cprintf(" 4.Type quit in answer column.");
+  cout<<endl<<endl;
+  cprintf(" 5.Your final reward will be shown after attempting all 10 questions.");
+  cout<<endl<<endl;
+  cprintf(" 6.If some text is typed then you will get 3 chance to write any one option");
+  cout<<endl<<endl;
+  cprintf(" 7.There are 3 ROUNDS in the quiz");
+  cout<<endl<<endl<<endl;
+  cprintf(" HOPE YOU ENJOY IT ^*^:) ");
+  getch();
+
+  clrscr();
+
+}
+
+void comments()
+{
+char com[5][15]={"Bravo!","Great Job!","Well Played!","Awesome!","Kudos!"};
+randomize();
+int w = random(5);
+
+textcolor(11);
+cprintf(com[w]);
+cout<<endl;
+}
+class riskit
+{public:
+char ques[100];
+char o1[30];
+char o2[30];
+char o3[30];
+char o4[30];
+char key[5];
+char yans[5];
+};
+
+
+void game()
+
+{
+   clrscr();
+
+   ifstream in,a,b,c,d,k;
+   int co=0;
+    in.open("riskall.txt",ios::in);
+    a.open("ans1.txt",ios::in);
+    b.open("ans2.txt",ios::in);
+    c.open("ans3.txt",ios::in);
+    d.open("ans4.txt",ios::in);
+    k.open("anskey.txt",ios::in);
+   user u;
+   u.getdata();
+
+  clrscr();
+  instructions();
+ textcolor(WHITE);
+ cout<<"\n\n\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\t\t\t\t";
+ cout<<"\n\n\n\n\n\t\t       ";
+ textcolor(10);
+ cprintf(" ****^* ALL THE BEST *^**** ");
+ cout<<endl;
+ cout<<"\n\n\t\t\t     ------------------- ";
+ cout<<"\n\t\t\t\t   * ";
+ textcolor(CYAN);
+ cprintf(strupr(u.ret_name()));
+ cout<<'*';
+ cout<<"\n\t\t\t     ------------------- ";
+
+ cout<<endl<<endl<<"\t\t\t     ";
+ textcolor(11);
+ cprintf("LETS BEGIN THE QUIZ ! ");
+ textcolor(WHITE);
+ cout<<"\n\n\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\t\t\t\t";
+ textcolor(WHITE+BLINK);
+ cprintf("PRESS ANY KEY");
+ textcolor(WHITE);
+
+ getch();
+
+ clrscr();
+
+ riskit q[100];
+ long long int mprice=1000;
+ in.seekg(0,ios::beg);
+ a.seekg(0,ios::beg);
+ b.seekg(0,ios::beg);
+ c.seekg(0,ios::beg);
+ d.seekg(0,ios::beg);
+ k.seekg(0,ios::beg);
+
+   int j=0;
+   while(in)
+   {if(in.eof())break;
+    in.getline(q[j].ques,200,'\n');
+    a.getline(q[j].o1,30,'\n');
+    b.getline(q[j].o2,30,'\n');
+    c.getline(q[j].o3,30,'\n');
+    d.getline(q[j].o4,30,'\n');
+    k.getline(q[j].key,5,'\n');
+   j++;
+
+    }
+int level=1;
+
+for(int w=1;w<=level;w++)
+{
+textcolor(WHITE);
+ cout<<"\n\n\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\t\t\t\t";
+
+ cout<<"\n\n\n\n\n\t\t       ";
+ textcolor(10);
+ cprintf(" ****^* ALL THE BEST *^**** ");
+ cout<<"\n\n\t\t        ";
+ textcolor(11);
+ cprintf("LETS BEGIN LEVEL ");
+ cout<<level;
+ cprintf(" OF THE QUIZ ! ");
+ textcolor(WHITE);
+ cout<<"\n\n\t\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\t\t\t\t";
+
+  sound(140);
+   delay(2000);
+   nosound();
+
+
+  delay(2000);
+  for(int v=1;v<=50;v++)
+      {  clrscr();
+  cout<<"\n\n\n\n\t\t\t\t   Loading "<<'\n'<<'\t'<<'\t';
+ for(int j=1;j<=v;j++)
+  cout<<"²";
+  cout<<"\n\n\t "<<2*v<<"%";
+ if( v > 1 && v < 20)
+  cout<<"\n\n\tCreating Temporary files";
+ else if( v > 20 && v<40)
+  cout<<"\n\n\tAccessing Main Memory";
+ else if(v >40 && v<48)
+  cout<<"\n\n\tAccessing Cache";
+ else cout<<"\n\n\tComplete. Press Enter to Continue ";
+  delay(150 - v*3);
+      }
+cout<<endl<<endl;
+ textcolor(WHITE+BLINK);
+ cprintf("PRESS ANY KEY");
+ textcolor(WHITE);
+ getch();
+ clrscr();
+
+
+
+ randomize();
+ int p=random(j-5);
+ for(int i=p;i<p+(5);i++)
+
+{
+int incorrect=0;
+  if(incorrect<3)
+   {
+    for(int x=0;x<=incorrect;x++)
+    {
+    cout<<"\t\t\t\t";
+    textcolor(YELLOW);
+  cprintf("LEVEL");
+  cout<<w<<endl;
+  cout<<"\t\t\t\t";
+  cprintf(" Risk It All");
+  cout<<endl<<endl;
+  textcolor(WHITE);
+  cprintf(q[i].ques);
+  cout<<endl;
+  cprintf(q[i].o1);
+  cout<<endl;
+  cprintf(q[i].o2);
+  cout<<endl;
+  cprintf(q[i].o3);
+  cout<<endl;
+  cprintf(q[i].o4);
+  cout<<endl;
+
+  cout<<"\n";
+
+
+   textcolor(CYAN);
+  cprintf(" CHOOSE THE CORRECT OPTION ");
+  cout<<endl;
+
+  gets(q[i].yans);
+
+  //comparing user's answer with correct answer
+  if(strcmpi(q[i].key,q[i].yans)==0)
+{ textcolor(14);
+  cprintf(" correct !");
+    cout<<endl;
+    delay(1000);
+    co++;
+    comments();
+    mprice=mprice*2;
+    textcolor(15);
+    cprintf("You won Rs. ");
+    cout<<mprice<<endl;
+    u.get_reward(mprice);
+    delay(1000);
+    cprintf("You wanna risk it all !!");
+    cout<<endl;
+    char want[5];
+    cout<<"Enter your choice (yes/no)"<<endl;
+    gets(want);
+    if(strcmpi(want,"yes")==0)
+    cout<<"Let's continue"<<endl;
+    else if(strcmpi(want,"no")==0)
+    {
+    cout<<" Congratulations! you won Rs."<<mprice<<endl;
+    goto label;
+    break;
+    }
+    else
+  {  cout<<"invalid entry"<<endl;  }
+
+  }//if loop ends here
+  else if(strcmpi(q[i].yans,"quit")==0)
+  { // game ask for quit;
+  if(co!=0)
+{  cout<<" you have quitted the game"<<endl;
+  u.get_reward(mprice); }
+  else
+  {  cout<<" you have quitted the game"<<endl;
+  u.get_reward(0);  }
+  goto label;
+   break;
+   }
+ else if((strcmpi(q[i].yans,"a")==0)||(strcmpi(q[i].yans,"b")==0)||(strcmpi(q[i].yans,"c")==0)||(strcmpi(q[i].yans,"d")==0))
+ {cout<<"incorrect"<<endl;
+ u.get_reward(0);
+ goto label;
+ break;}
+   else
+  {
+   cout<<"\n invalid entry";
+
+   incorrect++;
+   if(incorrect==3)
+ {  u.get_reward(mprice);
+ goto label;
+   break;}
+
+  }
+  cout<<"\n Press any key.";
+  getch();
+  clrscr();
+}//get loop ends
+ }// if loop ends
+ } //  random ends
+//if ends here !=1
+if(co==5||co==10)
+{level++;}
+else
+{break;}
+
+
+
+
+} // level loop
+
+
+label:
+u.result(co);
+
+   ofstream bout("reward.dat", ios::binary|ios::app);
+   bout.write((char*)&u,sizeof(u));
+   bout.close();
+
+    in.close();
+    a.close();
+    b.close();
+    c.close();
+    d.close();
+    k.close();
+    getch();
+//for loop terminates
+
+ //if loop breaks
+}
+
+void main()
+{
+  clrscr();
+
+  cout<<"\n\n\n\n\n";
+  cout<<"\t\t\t________________________________\n\n\t\t        ";
+  textcolor(11);
+  cprintf(" W E L C O M E   T O   T H E  Q U I Z ");
+  cout<<"\n\n\t\t\t   ";
+  textcolor(YELLOW);
+  cprintf("   R I S K   I T   A L L");
+  textcolor(WHITE);
+  cout<<" \t\t\n\n\t\t         L O A D I N G... please wait ";
+  cout<<"\n\n\t\t\t________________________________";
+  delay(3000);
+
+  int no;
+
+  while(1)
+  {
+  main_menu:
+  clrscr();
+  textcolor(11);
+  cout<<"\n\n";
+  cprintf("Welcome to Main Menu. Please enter your choice.");
+  textcolor(WHITE);
+  cout<<"\n\n 1.ADMIN login \n 2.Play Quiz \n 3.Exit \n\n";
+  textcolor(12);
+  cprintf("Enter your choice: ");
+  cin>>no;
+  textcolor(WHITE);
+
+  if(no==1)
+  {
+   clrscr();
+   for(int i=2;i>=0;i--)
+  { int ch;
+    char ps[20];
+    again:
+    cout<<endl;
+    textcolor(14);
+    cprintf(" Enter Password (enter space after password): ");
+    textcolor(WHITE);
+    for(int j=0;j<20;j++)
+  {
+     ch=getch();
+     if(ch==' ')
+      { ps[j]='\0';
+	break;
+      }
+      else
+      { ps[j]=ch;
+	cout<<"*";
+      }
+  }
+  if((strcmp(ps,"mehul")!=0)&&(i!=0))
+  cout<<"\n You have "<<i<<" attempts left! \n";
+  else if((strcmp(ps,"mehul")!=0)&&(i==0))
+  { cout<<"\nSorry, could not open admin portal";
+    getch();
+    break;
+  }
+  else
+  {
+   while(1)
+   {
+   clrscr();
+    textcolor(14);
+    cout<<endl;
+    cprintf(" Welcome to ADMIN portal");
+  textcolor(WHITE);
+  cout<<endl<<"_____________________________________________";
+  textcolor(10);
+  cout<<endl<<endl;
+  cprintf("Please enter your choice.");
+  textcolor(WHITE);
+
+  cout<<"\n\n1.Add more questions to the quiz";
+  cout<<"\n2.View scoreboard";
+  cout<<"\n3.Play Quiz";
+  cout<<"\n4.Back to Main Menu";
+  cout<<"\n5.Exit\n\n";
+  int n;
+  cout<<endl;
+  textcolor(12);
+
+  cprintf("Enter your choice: ");
+  cin>>n;
+  textcolor(WHITE);
+
+  if(n==1)
+  {
+   ofstream out,e,f,g,h,i;
+   clrscr();
+   textcolor(CYAN);
+   cout<<endl;
+
+
+
+     out.open("riskall.txt",ios::app);
+     e.open("ans1.txt",ios::app);
+     f.open("ans2.txt",ios::app);
+     g.open("ans3.txt",ios::app);
+     h.open("ans4.txt",ios::app);
+     i.open("anskey.txt",ios::app);
+
+
+   char Q[200], A[30],B[30], C[30], D[30], akey[5];
+   cout<<endl<<endl<<"Enter the question: ";
+   gets(Q);
+   out<<endl<<Q;
+   cout<<"\n Enter the Option 1: ";
+   gets(A);
+   e<<endl<<A;
+   cout<<"\n Enter the Option 2: ";
+   gets(B);
+   f<<endl<<B;
+   cout<<"\n Enter the Option 3: ";
+   gets(C);
+   g<<endl<<C;
+   cout<<"\n Enter the Option 4: ";
+   gets(D);
+   h<<endl<<D;
+   cout<<"\n Enter the answer key: ";
+   gets(akey);
+   i<<endl<<akey;
+
+   cout<<"\n Question added successfully!";
+   getch();
+   out.close();
+   e.close();
+   f.close();
+   g.close();
+   h.close();
+   i.close();
+   textcolor(WHITE);
+   }
+   else if(n==2)
+  {
+    clrscr();
+    int m=5;
+    ifstream in;
+    in.open("reward.dat",ios::binary,ios::in);
+    user u;
+    cout<<"\n   ";
+    textcolor(9);
+
+    cprintf("NAME");
+    cout<<" \t    ";
+    cprintf("AGE ");
+    cout<<"\t     ";
+    cprintf("REWARD");
+    cout<<"\t     ";
+    cprintf("RATE");
+    cout<<"\n";
+
+    textcolor(WHITE);
+    cout<<"______________________________________________________________________________\n\n";
+
+    while(in)
+    {
+      in.read((char*)&u, sizeof(u));
+      if(in.eof()) break;
+      else
+      { u.show(m);
+	cout<<endl;
+      }
+      m++;
+    }
+   textcolor(WHITE);
+   in.close();
+   getch();
+
+ }
+   else if(n==3)
+  {
+   game();
+   textcolor(WHITE);
+  }
+   else if(n==4)
+   {
+     goto main_menu;
+   }
+   else if(n==5)
+   exit(0);
+
+   else
+   {cout<<"\nInvalid choice!";
+    getch();
+    clrscr();}
+
+   }//else ends
+   }//while ends
+   }//for loop ends
+   }//admin if ends
+
+
+  //USER LOGIN
+
+  else if(no==2)
+  {
+   game();
+   textcolor(WHITE);
+  }
+  else if(no==3)
+  exit(0);
+
+  else
+  {
+    cout<<"\nInvalid choice!";
+    getch();
+  }
+}//while ends
+}//main ends
